@@ -1,0 +1,16 @@
+<button class='show-dialog-button' type='button'>Показать диалог</button>
+<dialog class='dialog-box'>
+  <p>Закрой меня</p>
+  <button class='close-dialog-button' type='button'>Закрыть</button>
+</dialog>
+<script>
+  const showDialog = document.querySelector('.show-dialog-button');
+  const dialogBox = document.querySelector('.dialog-box');
+  const closeDialog = document.querySelector('.close-dialog-button');
+  showDialog.addEventListener('click', () => {
+    dialogBox.showModal();
+  });
+  closeDialog.addEventListener('click', () => {
+    dialogBox.close();
+  });
+</script>
