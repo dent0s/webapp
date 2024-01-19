@@ -1,16 +1,21 @@
-<button class='show-dialog-button' type='button'>Показать диало123123г</button>
-<dialog class='dialog-box'>
-  <p>Закрой меня</p>
-  <button class='close-dialog-button' type='button'>Закрыть</button>
-</dialog>
-<script>
-  const showDialog = document.querySelector('.show-dialog-button');
-  const dialogBox = document.querySelector('.dialog-box');
-  const closeDialog = document.querySelector('.close-dialog-button');
-  showDialog.addEventListener('click', () => {
-    dialogBox.showModal();
-  });
-  closeDialog.addEventListener('click', () => {
-    dialogBox.close();
-  });
-</script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Web App</title>
+</head>
+<body>
+    <div id="content">
+        <h1>Loading...</h1>
+    </div>
+
+    <script>
+        // Получаем часть URL после последнего слеша
+        var file_id = window.location.pathname.split('/').pop();
+
+        // Загружаем и отображаем значение на странице
+        document.getElementById('content').innerHTML = '<h1>' + file_id + '</h1>';
+    </script>
+</body>
+</html>
