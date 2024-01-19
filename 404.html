@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 Not Found</title>
+</head>
+<body>
+    <div id="content">
+        <h1>Loading...</h1>
+    </div>
+
+    <script>
+        // Получаем часть URL после последнего слеша
+        var file_id = window.location.pathname.split('/').pop();
+
+        // Загружаем и отображаем значение на странице
+        document.getElementById('content').innerHTML = '<h1>' + file_id + '</h1>';
+    </script>
+</body>
+</html>
