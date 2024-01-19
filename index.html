@@ -1,21 +1,27 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your Web App</title>
+  <meta charset="UTF-8">
+  <title>My Site</title>
 </head>
 <body>
-    <div id="content">
-        <h1>Loading...</h1>
-    </div>
 
-    <script>
-        // Получаем часть URL после последнего слеша
-        var file_id = window.location.pathname.split('/').pop();
+  <img id="img">
 
-        // Загружаем и отображаем значение на странице
-        document.getElementById('content').innerHTML = '<h1>' + file_id + '</h1>';
-    </script>
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const fileId = urlParams.get('id');
+
+    if (fileId) {
+      fetch(`https://api.telegram.org/bot5871863876:AAF0TkJMfh0QmVDg9Jz8AVLb9EULdhIkeRY/getFile?file_id=${fileId}`)
+        .then(res => res.json()) 
+        .then(data => {
+          const imgUrl = `https://api.telegram.org/file/bot5871863876:AAF0TkJMfh0QmVDg9Jz8AVLb9EULdhIkeRY/${data.result.file_path}`;
+          
+          document.getElementById('img').src = imgUrl;
+        });
+    }
+  </script>
+
 </body>
 </html>
