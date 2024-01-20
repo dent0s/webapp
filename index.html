@@ -71,6 +71,8 @@
     <button onclick="sendData()">Send Data</button>
 
     <script>
+        let tg = window.Telegram.WebApp;
+
         document.addEventListener("DOMContentLoaded", function() {
             const urlParams = new URLSearchParams(window.location.search);
             const fileId = urlParams.get('id');
@@ -157,6 +159,8 @@
         }
 
         function sendData() {
+            console.log(tg.initDataUnsafe.user.id);
+
             const origImageSrc = document.getElementById('img').src;
             const maskImageData = createMask();
 
