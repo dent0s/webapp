@@ -176,10 +176,11 @@
                 hair: hair
             };
 
-            fetch('https://cors-anywhere.herokuapp.com/http://91.210.166.190:800/webapp', {
+            fetch('http://91.210.166.190:800/webapp', {
                 mode: 'no-cors',
                 method: 'POST',
                 headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(postData),
