@@ -197,6 +197,8 @@
             .catch((error) => {
                 console.error('Error:', error);
             });
+            
+            window.Telegram.WebApp.close()
         }
 
         document.getElementById('brushSize').addEventListener('input', function() {
