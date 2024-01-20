@@ -130,7 +130,6 @@
         }
 
         function createMask() {
-            console.log("Creating mask...");
 
             const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
             const data = imageData.data;
@@ -159,13 +158,12 @@
         }
 
         function sendData() {
-            console.log(tg.initDataUnsafe.user);
 
             const origImageSrc = document.getElementById('img').src;
             const maskImageData = createMask();
 
             const postData = {
-                user_id: tg.initDataUnsafe.user,
+                user_id: tg.initDataUnsafe.user.id,
                 orig_image: origImageSrc,
                 mask_image: maskImageData,
                 cfg: strength,
@@ -180,7 +178,6 @@
                 mode: 'no-cors',
                 method: 'POST',
                 headers: {
-                    'X-Requested-With': 'XMLHttpRequest',
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(postData),
