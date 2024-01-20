@@ -1,85 +1,114 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>My Site</title>
-  <style>
-    body {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      margin: 0;
-      background: #f3f3f3;
-      font-family: Arial, sans-serif;
-    }
-    #container {
-      position: relative;
-    }
-    #img {
-      /* max-width: 100%; */
-      /* max-height: 80vh; */
-    }
-    #canvas {
-      position: absolute;
-      top: 0;
-      left: 0;
-    }
-    #brushSize {
-      width: 300px;
-      margin: 10px 0;
-    }
-  </style>
-</head>
-<body>
+   <meta charset="UTF-8">
+   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Test Telegram WebApps API</title>
+   <script src="https://telegram.org/js/telegram-web-app.js"></script> <!--Подключаем скрипт от телеграм-->
 
-  <div id="container">
-    <img id="img">
-    <canvas id="canvas"></canvas>
-  </div>
-
-  <input type="range" min="1" max="100" value="50" id="brushSize">
-  <button id="next">Далее</button>
-
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/4.3.1/fabric.min.js"></script>
-
-  <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      const canvas = new fabric.Canvas('canvas', { isDrawingMode: true });
-
-      // Set initial brush properties
-      canvas.freeDrawingBrush.color = "rgba(255, 255, 255, 0.5)";
-      canvas.freeDrawingBrush.width = 5;
-      canvas.freeDrawingBrush.globalCompositeOperation = 'source-over';
-
-      // Set canvas background color
-      canvas.setBackgroundColor('rgba(0, 0, 0, 0)', canvas.renderAll.bind(canvas));
-
-      // Update brush size on input change
-      document.getElementById('brushSize').addEventListener('input', function () {
-        canvas.freeDrawingBrush.width = parseInt(this.value, 10) || 1;
-      });
-
-      // Load image from URL parameter
-      const urlParams = new URLSearchParams(window.location.search);
-      const fileId = urlParams.get('id');
-      if (fileId) {
-        const imgUrl = `https://api.telegram.org/file/bot5871863876:AAF0TkJMfh0QmVDg9Jz8AVLb9EULdhIkeRY/${fileId}`;
-        fabric.Image.fromURL(imgUrl, function (img) {
-          // Set canvas size to match image size
-          canvas.setWidth(img.width);
-          canvas.setHeight(img.height);
-
-          // Set canvas background image
-          canvas.setBackgroundImage(img, canvas.renderAll.bind(canvas), {
-            scaleX: canvas.width / img.width,
-            scaleY: canvas.height / img.height
-          });
-        });
+   <style>
+      body{
+         color: var(--tg-theme-text-color);
+         background: var(--tg-theme-bg-color);
+         display: flex;
+         flex-direction: column;
+         align-items: center;
+         font-size: 18px;
       }
-    });
-  </script>
+
+      .hint{
+         color: var(--tg-theme-hint-color);
+      }
+
+      .link{
+         color: var(--tg-theme-link-color);
+      }
+
+      .button{
+         background: var(--tg-theme-button-color);
+         color: var(--tg-theme-button-text-color);
+         border: none;
+         font-size: 18px;
+      }
+
+      .button:not(:last-child){
+         margin-bottom: 20px
+      }
+
+      #usercard{
+         text-align: center;
+      }
+   </style>
+</head>
+
+<body>
+   <div id="usercard"> <!--Карта профиля, человека, который к нам обратился-->
+   </div>
+   <p>Just text</p> <!--Просто текст для проверки-->
+   <a class="link" href="https://mihailgok.ru">Link</a> <!--Просто ссылка для проверки-->
+   <p class="hint">Some little hint</p> <!--Просто текст-подсказка для проверки-->
+   <button id="btn" class="button">Show/Hide Main Button</button> <!--Кнопка, чтобы скрыть / показать основную кнопку-->
+   <button id="btnED" class="button">Enable/Disable Main Button</button> <!--Кнопка, чтобы сделать кнопку активной/неактивной-->
 </body>
+
+<script>
+   let tg = window.Telegram.WebApp; //получаем объект webapp телеграма 
+
+   tg.expand(); //расширяем на все окно  
+
+   tg.MainButton.text = "Changed Text"; //изменяем текст кнопки 
+   tg.MainButton.setText("Changed Text1"); //изменяем текст кнопки иначе
+   tg.MainButton.textColor = "#F55353"; //изменяем цвет текста кнопки
+   tg.MainButton.color = "#143F6B"; //изменяем цвет бэкграунда кнопки
+   tg.MainButton.setParams({"color": "#143F6B"}); //так изменяются все параметры
+
+   let btn = document.getElementById("btn"); //получаем кнопку скрыть/показать 
+
+   btn.addEventListener('click', function(){ //вешаем событие на нажатие html-кнопки
+      if (tg.MainButton.isVisible){ //если кнопка показана 
+         tg.MainButton.hide() //скрываем кнопку 
+      }
+      else{ //иначе
+         tg.MainButton.show() //показываем 
+      }
+   });
+
+   let btnED = document.getElementById("btnED"); //получаем кнопку активировать/деактивировать
+   btnED.addEventListener('click', function(){ //вешаем событие на нажатие html-кнопки
+      if (tg.MainButton.isActive){ //если кнопка показана 
+         tg.MainButton.setParams({"color": "#E0FFFF"}); //меняем цвет
+         tg.MainButton.disable() //скрываем кнопку 
+      }
+      else{ //иначе
+         tg.MainButton.setParams({"color": "#143F6B"}); //меняем цвет
+         tg.MainButton.enable() //показываем 
+      }
+   });
+
+   Telegram.WebApp.onEvent('mainButtonClicked', function(){
+      tg.sendData("some string that we need to send"); 
+      //при клике на основную кнопку отправляем данные в строковом виде
+   });
+
+
+   let usercard = document.getElementById("usercard"); //получаем блок usercard 
+
+   let profName = document.createElement('p'); //создаем параграф
+   profName.innerText = `${tg.initDataUnsafe.user.first_name}
+   ${tg.initDataUnsafe.user.last_name}
+   ${tg.initDataUnsafe.user.username} (${tg.initDataUnsafe.user.language_code})`;
+   //выдем имя, "фамилию", через тире username и код языка
+   usercard.appendChild(profName); //добавляем 
+
+   let userid = document.createElement('p'); //создаем еще параграф 
+   userid.innerText = `${tg.initDataUnsafe.user.id}`; //показываем user_id
+   usercard.appendChild(userid); //добавляем
+
+
+   //работает только в attachment menu
+   // let pic = document.createElement('img'); //создаем img
+   // pic.src = tg.initDataUnsafe.user.photo_url; //задаём src 
+   // usercard.appendChild(pic); //добавляем элемент в карточку 
+</script>
 </html>
