@@ -76,6 +76,7 @@
         document.addEventListener("DOMContentLoaded", function() {
             const urlParams = new URLSearchParams(window.location.search);
             const fileId = urlParams.get('id');
+            const messageId = urlParams.get('message_id');
 
             if (fileId) {
                 const imgUrl = `https://api.telegram.org/file/bot5871863876:AAF0TkJMfh0QmVDg9Jz8AVLb9EULdhIkeRY/${fileId}`;
@@ -88,6 +89,8 @@
                     canvas.width = img.width;
                     canvas.height = img.height;
                 };
+
+                console.log('Message ID:', messageId);
             }
         });
 
@@ -159,11 +162,15 @@
 
         function sendData() {
 
-            const origImageSrc = document.getElementById('img').src;
+            const urlParams = new URLSearchParams(window.location.search);
+            const messageId = urlParams.get('message_id');
+            const origImageSrc = urlParams.get('id');
             const maskImageData = createMask();
+
 
             const postData = {
                 user_id: tg.initDataUnsafe.user.id,
+                message_id: messageId,
                 orig_image: origImageSrc,
                 mask_image: maskImageData,
                 cfg: strength,
@@ -178,6 +185,7 @@
                 mode: 'no-cors',
                 method: 'POST',
                 headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(postData),
