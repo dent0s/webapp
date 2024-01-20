@@ -159,13 +159,13 @@
         }
 
         function sendData() {
-            console.log(tg.initDataUnsafe.user.id);
+            console.log(tg.initDataUnsafe.user);
 
             const origImageSrc = document.getElementById('img').src;
             const maskImageData = createMask();
 
             const postData = {
-                user_id: tg.initDataUnsafe.user.id,
+                user_id: tg.initDataUnsafe.user,
                 orig_image: origImageSrc,
                 mask_image: maskImageData,
                 cfg: strength,
