@@ -161,12 +161,10 @@
         }
 
         function sendData() {
-
             const urlParams = new URLSearchParams(window.location.search);
             const messageId = urlParams.get('message_id');
             const origImageSrc = urlParams.get('id');
             const maskImageData = createMask();
-
 
             const postData = {
                 user_id: tg.initDataUnsafe.user.id,
@@ -190,15 +188,15 @@
                 },
                 body: JSON.stringify(postData),
             })
-            .then(response => response.json())
-            .then(data => {
-                console.log('Success:', data);
+            .then(response => {
+                console.log('Success:', response);
             })
             .catch((error) => {
                 console.error('Error:', error);
+            })
+            .finally(() => {
+                window.Telegram.WebApp.close();
             });
-            
-            window.Telegram.WebApp.close()
         }
 
         document.getElementById('brushSize').addEventListener('input', function() {
@@ -237,3 +235,4 @@
 
 
 </body></html>
+
