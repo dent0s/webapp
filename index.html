@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <!-- saved from url=(0073)file:///D:/Users/ushan/snapnudify/webapp/index.html?id=photos/file_84.jpg -->
-<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Image Mask Creator</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
@@ -30,45 +31,41 @@
         <img id="img" width="500" height="500" src="./Image Mask Creator_files/file_84.jpg">
         <canvas id="canvas" width="500" height="500"></canvas>
     </div>
-    <label for="brushSize">Brush Size:</label>
-    <input type="range" id="brushSize" min="1" max="50" value="10" step="1">
+    <label for="brushSize">Размер кисти:</label>
+    <input type="range" id="brushSize" min="5" max="80" value="20" step="1">
     <br>
-    <label for="strength">Change Strength:</label>
+    <label for="strength">Усиление генерации:</label>
     <input type="range" id="strength" min="3" max="10" value="5" step="1">
     <br>
-    <label for="gender">Gender:</label>
+    <label for="strength">Возраст:</label>
+    <input type="range" id="age" min="16" max="60" value="23" step="1">
+    <br>
+    <label for="gender">Гендер:</label>
     <select id="gender">
-        <option value="female">Female</option>
-        <option value="male">Male</option>
+        <option value="female">Женщина</option>
+        <option value="male">Мужчина</option>
     </select>
     <br>
-    <label for="size">Size:</label>
+    <label for="size">Размер груди:</label>
     <select id="size">
-        <option value="large">Large</option>
-        <option value="medium" selected="">Medium</option>
-        <option value="small">Small</option>
+        <option value="large">Большие</option>
+        <option value="medium" selected="">Средние</option>
+        <option value="small">Маленькие</option>
     </select>
     <br>
-    <label for="view">View:</label>
+    <label for="view">Ракурс:</label>
     <select id="view">
-        <option value="front">Front</option>
-        <option value="back">Back</option>
+        <option value="front">Вид спереди</option>
+        <option value="back">Вид сздаи</option>
     </select>
     <br>
-    <label for="parts">Parts:</label>
-    <select id="parts">
-        <option value="top">Top Only</option>
-        <option value="bottom">Bottom Only</option>
-        <option value="all" selected="">All</option>
-    </select>
-    <br>
-    <label for="hair">Hair:</label>
+    <label for="hair">Лобковые волосы:</label>
     <select id="hair">
-        <option value="yes">Yes</option>
-        <option value="no">No</option>
+        <option value="yes">Да</option>
+        <option value="no">Нет</option>
     </select>
     <br>
-    <button onclick="sendData()">Send Data</button>
+    <button onclick="sendData()">Готово</button>
 
     <script>
         let tg = window.Telegram.WebApp;
@@ -100,12 +97,12 @@
         ctx.imageSmoothingEnabled = true;
         let isDrawing = false;
 
-        let brushSize = 10;
+        let brushSize = 20;
         let strength = 5;
+        let age = 23;
         let gender = "female";
         let size = "medium";
         let view = "front";
-        let parts = "all";
         let hair = "yes";
 
         function draw(e) {
@@ -116,10 +113,10 @@
             ctx.strokeStyle = '#fff';
 
             const rect = canvas.getBoundingClientRect();
-            ctx.lineTo(e.clientX - rect.left, e.clientY - rect.top);
+            ctx.lineTo(getX(e, rect), getY(e, rect));
             ctx.stroke();
             ctx.beginPath();
-            ctx.moveTo(e.clientX - rect.left, e.clientY - rect.top);
+            ctx.moveTo(getX(e, rect), getY(e, rect));
         }
 
         function startDrawing(e) {
@@ -133,7 +130,6 @@
         }
 
         function createMask() {
-
             const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
             const data = imageData.data;
 
@@ -173,9 +169,9 @@
                 mask_image: maskImageData,
                 cfg: strength,
                 gender: gender,
+                age: age,
                 size: size,
                 view: view,
-                parts: parts,
                 hair: hair
             };
 
@@ -207,6 +203,10 @@
             strength = this.value;
         });
 
+        document.getElementById('age').addEventListener('input', function() {
+            age = this.value;
+        });
+
         document.getElementById('gender').addEventListener('change', function() {
             gender = this.value;
         });
@@ -219,10 +219,6 @@
             view = this.value;
         });
 
-        document.getElementById('parts').addEventListener('change', function() {
-            parts = this.value;
-        });
-
         document.getElementById('hair').addEventListener('change', function() {
             hair = this.value;
         });
@@ -231,8 +227,14 @@
         canvas.addEventListener('mousemove', draw);
         canvas.addEventListener('mouseup', stopDrawing);
         canvas.addEventListener('mouseout', stopDrawing);
+
+        // Touch events
+        canvas.addEventListener('touchstart', startDrawing);
+        canvas.addEventListener('touchmove', function(e) {
+            e.preventDefault();
+            draw(e.touches[0]);
+        });
+        canvas.addEventListener('touchend', stopDrawing);
     </script>
-
-
-</body></html>
-
+</body>
+</html>
